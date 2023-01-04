@@ -4,6 +4,7 @@ import logo from './logo.svg'
 import './App.css'
 import { AuthProvider } from './components/login/Auth'
 import Navbar from './components/login/Navbar'
+import Footer from './components/login/Footer'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         </p>
         <Login/>
       </header>
+      <Footer/>
     </div>
     </AuthProvider>
   )
