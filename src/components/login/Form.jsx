@@ -1,14 +1,13 @@
-import React from 'react'
+import { useRef} from 'react'
 import Select from 'react-select'
 import styles from './form.module.css'
+
+
 
 const years = [];
 const currentYear = new Date().getFullYear();
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log('submit');
-};
+
 
 const genres = [
   { value: 'jazz', label: 'Jazz' },
@@ -24,15 +23,35 @@ for (let i = 0; i < 101; i++) {
 
 
 
-const Form = () => (
- <form onSubmit={handleSubmit}>
-  <Select options={genres} placeholder="Select Genre..."   className={styles.select} />
-  <Select options={years} placeholder="Select Year..."   className={styles.select} />
+const Form = () => {
+
+const genreRef = useRef();
+const yearRef = useRef();
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  if(genreRef.current.hasValue() && yearRef.current.hasValue()) {
+
+    let selectedGenre = genreRef.current.getValue()[0].value;
+    let selectedYear = yearRef.current.getValue()[0].value;
+  console.log('genre/year:', selectedGenre, selectedYear);
+  }else {
+    alert('Please select a genre and year')
+
+  }
+};
+return (
+  <form onSubmit={handleSubmit}>
+  <Select options={genres} placeholder="Select Genre..."   className={styles.select} ref={genreRef} />
+  <Select options={years} placeholder="Select Year..."   className={styles.select} ref={yearRef}/>
   <button className={styles.button} type='submit'>Generate Playlist</button>
  </form>
+)
+
   
  
  
-)
+}
 
 export default Form

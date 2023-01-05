@@ -1,4 +1,3 @@
-import { SpotifyAuth, Scopes } from 'react-spotify-auth';
 import { useAuth } from './Auth';
 import styles from './createPlaylist.module.css';
 import Form from './Form';
@@ -8,7 +7,7 @@ if (!spotifyClientKey) throw new Error(`spotify client key missing. Did you read
 
 function CreatePlaylist() {
   let retVal;
-  const { token, setToken } = useAuth();
+  const { token } = useAuth();
 
     
     if (token) {
