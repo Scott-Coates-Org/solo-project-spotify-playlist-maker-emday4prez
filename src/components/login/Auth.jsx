@@ -1,8 +1,8 @@
-import Cookies from 'js-cookie';
-import React, { useContext, createContext, useState } from 'react';
+import Cookies from "js-cookie";
+import React, { useContext, createContext, useState } from "react";
 
 export const AuthContext = createContext();
-const spotifyAuthTokenCookie = 'spotifyAuthToken';
+const spotifyAuthTokenCookie = "spotifyAuthToken";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(Cookies.get(spotifyAuthTokenCookie));
@@ -25,7 +25,16 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser: setUserWrapper, token, setToken: setTokenWrapper }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser: setUserWrapper,
+        token,
+        setToken: setTokenWrapper,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

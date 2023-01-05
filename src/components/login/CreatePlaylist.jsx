@@ -1,33 +1,40 @@
-import { useAuth } from './Auth';
-import styles from './createPlaylist.module.css';
-import Form from './Form';
+import { useAuth } from "./Auth";
+import styles from "./createPlaylist.module.css";
+import Form from "./Form";
 
 const spotifyClientKey = process.env.REACT_APP_SPOTIFY_CLIENT_KEY;
-if (!spotifyClientKey) throw new Error(`spotify client key missing. Did you read the issues? If not, visit the Issues page in this repo on GitHub.`);
+if (!spotifyClientKey)
+  throw new Error(
+    `spotify client key missing. Did you read the issues? If not, visit the Issues page in this repo on GitHub.`
+  );
 
 function CreatePlaylist() {
   let retVal;
   const { token } = useAuth();
 
-    
-    if (token) {
+  if (token) {
     retVal = (
       <div className={styles.container}>
         <h1>Spotify Playlist Generator</h1>
-        <p>Our playlist make provides you with just the right music to get you in the zone without wasting your time.</p>
-        <Form/>
-        
-     </div>
+        <p>
+          Our playlist generator provides you with just the right music to get
+          you in the zone without wasting your time.
+        </p>
+        <Form />
+      </div>
     );
   } else {
     retVal = (
       <div className={styles.container}>
-     <h1>Spotify Playlist Generator</h1>
-        <p>Our playlist make provides you with just the right music to get you in the zone without wasting your time.</p>
+        <h1>Spotify Playlist Generator</h1>
+        <p>
+          Our playlist make provides you with just the right music to get you in
+          the zone without wasting your time.
+        </p>
       </div>
     );
   }
   return retVal;
 }
 
-export default CreatePlaylist
+export default CreatePlaylist;

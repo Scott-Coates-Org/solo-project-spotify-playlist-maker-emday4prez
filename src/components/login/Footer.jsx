@@ -1,13 +1,12 @@
-import styles from './footer.module.css';
+import styles from "./footer.module.css";
 function Footer() {
- const date = new Date();
- const year = date.getFullYear();
+  const date = new Date();
+  const year = date.getFullYear();
   return (
     <footer>
-     <p>&copy; {year} </p>
-
+      <p>&copy; {year} </p>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;
