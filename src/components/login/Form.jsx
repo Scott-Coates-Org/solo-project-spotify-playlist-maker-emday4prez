@@ -19,6 +19,20 @@ for (let i = 0; i < 101; i++) {
   years.push({ value: currentYear - i, label: currentYear - i });
 }
 
+const fillPlaylist = async (token, playlistId) => {};
+const searchForTracks = async (token, genre, year) => {
+  const searchResults = await fetcher(
+    `https://api.spotify.com/v1/search?q=genre:${genre}%20year:${year}&type=track&limit=30`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  console.log("search results:", searchResults);
+  return searchResults;
+};
+
 export default function Form() {
   const { token } = useAuth();
   const genreRef = useRef();
@@ -34,7 +48,7 @@ export default function Form() {
 
       const userData = await getUserData(token);
       const { href } = userData;
-      const postResponse = await fetcher(`${href}/playlists`, {
+      const createEmptyPlaylist = await fetcher(`${href}/playlists`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,7 +60,8 @@ export default function Form() {
           public: false,
         }),
       });
-      console.log(postResponse);
+      console.log(createEmptyPlaylist);
+      searchForTracks(token, selectedGenre, selectedYear);
     } else {
       alert("Please select a genre and year");
     }
