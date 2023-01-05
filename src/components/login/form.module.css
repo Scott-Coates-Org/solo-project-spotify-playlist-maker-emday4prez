@@ -4,3 +4,11 @@
   color: #333;
  
 }
+
+.button {
+ height: 50px;
+ width: 200px;
+ border: none;
+ align-self: center;
+ border-radius: .5rem;
+}

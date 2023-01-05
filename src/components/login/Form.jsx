@@ -4,6 +4,12 @@ import styles from './form.module.css'
 
 const years = [];
 const currentYear = new Date().getFullYear();
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log('submit');
+};
+
 const genres = [
   { value: 'jazz', label: 'Jazz' },
   { value: 'blues', label: 'Blues' },
@@ -19,9 +25,10 @@ for (let i = 0; i < 101; i++) {
 
 
 const Form = () => (
- <form>
+ <form onSubmit={handleSubmit}>
   <Select options={genres} placeholder="Select Genre..."   className={styles.select} />
   <Select options={years} placeholder="Select Year..."   className={styles.select} />
+  <button className={styles.button} type='submit'>Generate Playlist</button>
  </form>
   
  
