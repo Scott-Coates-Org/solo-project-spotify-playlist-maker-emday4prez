@@ -1,9 +1,9 @@
 import { useRef} from 'react'
 import Select from 'react-select'
 import styles from './form.module.css'
-
-
-
+import { getUserData } from '../../utils/api';
+import { useAuth } from '../login/Auth';
+import { fetcher } from '../../utils/api';
 const years = [];
 const currentYear = new Date().getFullYear();
 
@@ -21,14 +21,12 @@ for (let i = 0; i < 101; i++) {
   years.push({ value: currentYear - i, label: currentYear - i });
 }
 
-
-
-const Form = () => {
-
+export default function Form() {
+const {token} = useAuth();
 const genreRef = useRef();
 const yearRef = useRef();
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if(genreRef.current.hasValue() && yearRef.current.hasValue()) {
@@ -36,9 +34,24 @@ const handleSubmit = (e) => {
     let selectedGenre = genreRef.current.getValue()[0].value;
     let selectedYear = yearRef.current.getValue()[0].value;
   console.log('genre/year:', selectedGenre, selectedYear);
+
+   const userData = await getUserData(token)
+    const {href} = userData;
+    const postResponse = await fetcher(`${href}/playlists`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: `The ${selectedGenre} of ${selectedYear}`,
+        description: `A playlist of ${selectedGenre} from ${selectedYear}`,
+        public: false,
+      })
+    })
+    console.log(postResponse)
   }else {
     alert('Please select a genre and year')
-
   }
 };
 return (
@@ -54,4 +67,3 @@ return (
  
 }
 
-export default Form
