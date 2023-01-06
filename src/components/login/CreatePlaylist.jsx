@@ -1,6 +1,8 @@
 import { useAuth } from "./Auth";
+import { useState } from "react";
 import styles from "./createPlaylist.module.css";
 import Form from "./Form";
+import ProgressBar from "./ProgressBar";
 
 const spotifyClientKey = process.env.REACT_APP_SPOTIFY_CLIENT_KEY;
 if (!spotifyClientKey)
@@ -9,6 +11,8 @@ if (!spotifyClientKey)
   );
 
 function CreatePlaylist() {
+  const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState("Creating Playlist...");
   let retVal;
   const { token } = useAuth();
 
@@ -20,7 +24,19 @@ function CreatePlaylist() {
           Our playlist generator provides you with just the right music to get
           you in the zone without wasting your time.
         </p>
-        <Form />
+        <Form
+          progress={progress}
+          setProgress={setProgress}
+          message={message}
+          setMessage={setMessage}
+        />
+        {progress > 0 && (
+          <ProgressBar
+            progress={progress}
+            setProgress={setProgress}
+            message={message}
+          />
+        )}
       </div>
     );
   } else {
