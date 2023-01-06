@@ -19,8 +19,23 @@ for (let i = 0; i < 101; i++) {
   years.push({ value: currentYear - i, label: currentYear - i });
 }
 
-const fillPlaylist = async (token, playlistId) => {};
-const searchForTracks = async (token, genre, year) => {
+const fillPlaylist = async (token, playlistId, tracks) => {
+  const response = await fetcher(
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uris: tracks,
+      }),
+    }
+  );
+  return response;
+};
+const getTracks = async (token, genre, year) => {
   const searchResults = await fetcher(
     `https://api.spotify.com/v1/search?q=genre:${genre}%20year:${year}&type=track&limit=30`,
     {
@@ -29,8 +44,22 @@ const searchForTracks = async (token, genre, year) => {
       },
     }
   );
-  console.log("search results:", searchResults);
+
   return searchResults;
+};
+
+const selectTracksToAdd = (trackInfoArray) => {
+  let totalDuration = 0;
+  let tracksToAdd = [];
+  for (let i = 0; i < trackInfoArray.length; i++) {
+    if (totalDuration + trackInfoArray[i].duration_seconds < 3600) {
+      tracksToAdd.push(trackInfoArray[i].uri);
+      totalDuration += trackInfoArray[i].duration_seconds;
+    } else {
+      break;
+    }
+  }
+  return tracksToAdd;
 };
 
 export default function Form() {
@@ -44,7 +73,6 @@ export default function Form() {
     if (genreRef.current.hasValue() && yearRef.current.hasValue()) {
       let selectedGenre = genreRef.current.getValue()[0].value;
       let selectedYear = yearRef.current.getValue()[0].value;
-      console.log("genre/year:", selectedGenre, selectedYear);
 
       const userData = await getUserData(token);
       const { href } = userData;
@@ -60,8 +88,22 @@ export default function Form() {
           public: false,
         }),
       });
-      console.log(createEmptyPlaylist);
-      searchForTracks(token, selectedGenre, selectedYear);
+      const playlistId = createEmptyPlaylist.id;
+
+      const tracksResponse = await getTracks(
+        token,
+        selectedGenre,
+        selectedYear
+      );
+      const trackInfo = tracksResponse.tracks.items.map((track) => {
+        return {
+          uri: track.uri,
+          duration_seconds: Math.floor(track.duration_ms / 1000),
+        };
+      });
+      const tracksToAdd = selectTracksToAdd(trackInfo);
+
+      fillPlaylist(token, playlistId, tracksToAdd);
     } else {
       alert("Please select a genre and year");
     }
