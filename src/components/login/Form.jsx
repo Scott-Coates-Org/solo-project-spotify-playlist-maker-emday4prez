@@ -52,7 +52,7 @@ const selectTracksToAdd = (trackInfoArray) => {
   let totalDuration = 0;
   let tracksToAdd = [];
   for (let i = 0; i < trackInfoArray.length; i++) {
-    if (totalDuration + trackInfoArray[i].duration_seconds < 3600) {
+    if (totalDuration + trackInfoArray[i].duration_seconds <= 3600) {
       tracksToAdd.push(trackInfoArray[i].uri);
       totalDuration += trackInfoArray[i].duration_seconds;
     } else {
@@ -62,19 +62,20 @@ const selectTracksToAdd = (trackInfoArray) => {
   return tracksToAdd;
 };
 
-export default function Form() {
+export default function Form({ progress, setProgress, message, setMessage }) {
   const { token } = useAuth();
   const genreRef = useRef();
   const yearRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setProgress((prev) => prev + 10);
     if (genreRef.current.hasValue() && yearRef.current.hasValue()) {
       let selectedGenre = genreRef.current.getValue()[0].value;
       let selectedYear = yearRef.current.getValue()[0].value;
 
       const userData = await getUserData(token);
+      setProgress((prev) => prev + 10);
       const { href } = userData;
       const createEmptyPlaylist = await fetcher(`${href}/playlists`, {
         method: "POST",
@@ -89,21 +90,28 @@ export default function Form() {
         }),
       });
       const playlistId = createEmptyPlaylist.id;
-
+      setProgress((prev) => prev + 20);
       const tracksResponse = await getTracks(
         token,
         selectedGenre,
         selectedYear
       );
+      setMessage((message) => message + "songs found...");
+      setProgress((prev) => prev + 10);
       const trackInfo = tracksResponse.tracks.items.map((track) => {
         return {
           uri: track.uri,
           duration_seconds: Math.floor(track.duration_ms / 1000),
         };
       });
+      setProgress((prev) => prev + 20);
       const tracksToAdd = selectTracksToAdd(trackInfo);
-
+      setMessage((message) => message + `${tracksToAdd.length} songs added...`);
       fillPlaylist(token, playlistId, tracksToAdd);
+      setProgress(100);
+      setTimeout(() => {
+        setProgress(0);
+      }, 9000);
     } else {
       alert("Please select a genre and year");
     }
@@ -115,12 +123,14 @@ export default function Form() {
         placeholder="Select Genre..."
         className={styles.select}
         ref={genreRef}
+        isDisabled={progress > 0}
       />
       <Select
         options={years}
         placeholder="Select Year..."
         className={styles.select}
         ref={yearRef}
+        isDisabled={progress > 0}
       />
       <button className={styles.button} type="submit">
         Generate Playlist
