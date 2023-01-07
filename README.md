@@ -36,4 +36,4 @@ Go to the [milestones tab](../../milestone/1) to track your progress, it is impo
 
 ### Public URL
 
-[Replace me with the link to your app's URL](https://www.google.com/)
+[Live Demo URL](https://smx-spotify-playlist-mak-34d66.web.app/)
