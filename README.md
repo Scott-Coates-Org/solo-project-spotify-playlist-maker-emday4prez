@@ -36,4 +36,4 @@ Go to the [milestones tab](../../milestone/1) to track your progress, it is impo
 
 ### Public URL
 
-[Live Demo URL](https://smx-spotify-playlist-mak-34d66.web.app/)
+[https://smx-spotify-playlist-mak-34d66.web.app/](https://smx-spotify-playlist-mak-34d66.web.app/)
