@@ -96,6 +96,11 @@ export default function Form({ progress, setProgress, message, setMessage }) {
         selectedGenre,
         selectedYear
       );
+      if (tracksResponse.tracks.items.length === 0) {
+        alert("No songs found for this genre and year");
+        setProgress(0);
+        return;
+      }
       setMessage((message) => message + "songs found...");
       setProgress((prev) => prev + 10);
       const trackInfo = tracksResponse.tracks.items.map((track) => {
