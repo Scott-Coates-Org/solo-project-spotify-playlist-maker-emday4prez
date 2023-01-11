@@ -16,7 +16,6 @@ export async function getUserData(token) {
       "Content-Type": "application/json",
     },
     method: "GET",
-    mode: "cors",
   });
   return userResponse;
 }
