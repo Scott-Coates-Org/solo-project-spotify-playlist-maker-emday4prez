@@ -10,12 +10,13 @@ export async function fetcher(url, options = {}) {
 }
 
 export async function getUserData(token) {
-  const userResponse = await fetcher('https://api.spotify.com/v1/me', {
+  const userResponse = await fetcher("https://api.spotify.com/v1/me", {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    method: 'GET'
+    method: "GET",
+    mode: "cors",
   });
   return userResponse;
 }
