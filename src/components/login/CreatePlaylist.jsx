@@ -44,8 +44,8 @@ function CreatePlaylist() {
       <div className={styles.container}>
         <h1>Spotify Playlist Generator</h1>
         <p>
-          Our playlist make provides you with just the right music to get you in
-          the zone without wasting your time.
+          Our playlist generator provides you with just the right music to get
+          you in the zone without wasting your time.
         </p>
       </div>
     );
